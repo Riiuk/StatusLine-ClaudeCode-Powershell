@@ -6,7 +6,7 @@ Muestra en tiempo real en la parte inferior de Claude Code:
 - Barra de uso del contexto (con color según nivel)
 - Barras de rate limit **5h** y **7d** con porcentaje y tiempo hasta reset
 
-![Ejemplo de statusline con barras de contexto y rate limits]()
+![Statusline en acción](statusline-preview.png)
 
 ---
 
@@ -59,4 +59,9 @@ El script crea automáticamente `~/.claude/statusline-command.py` y añade la co
 
 ## Compatibilidad
 
-Probado en **Windows 11** con PowerShell 5.1. Requiere Python 3 en el PATH.
+| Sistema | Terminal | Estado |
+|---|---|---|
+| Windows 11 | PowerShell 5.1 | Probado |
+| Linux (CachyOS) | Kitty | Probado |
+
+Requiere Python 3 en el PATH.
