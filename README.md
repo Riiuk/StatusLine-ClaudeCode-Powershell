@@ -50,6 +50,20 @@ El script crea automáticamente `~/.claude/statusline-command.py` y añade la co
 
 ---
 
+## Sistema de colores
+
+El texto del statusline se muestra en **blanco**. Solo las barras de progreso cambian de color según el porcentaje de uso:
+
+| Rango | Color | Descripción |
+|---|---|---|
+| 0 – 49 % | 🟢 Verde | Uso bajo |
+| 50 – 79 % | 🟠 Naranja | Uso medio |
+| ≥ 80 % | 🔴 Rojo | Uso alto |
+
+Se usan **códigos de color 256-color** (`\033[38;5;Nm`) en lugar de los 8 colores ANSI estándar. Esto garantiza que los colores se muestren correctamente en terminales con temas personalizados (como Kitty en Linux con paletas oscuras), donde los colores estándar pueden renderizarse de forma incorrecta.
+
+---
+
 ## Desinstalación
 
 1. Elimina la sección `statusline` de `~/.claude/settings.json`.
@@ -61,7 +75,9 @@ El script crea automáticamente `~/.claude/statusline-command.py` y añade la co
 
 | Sistema | Terminal | Estado |
 |---|---|---|
-| Windows 11 | PowerShell 5.1 | Probado |
-| Linux (CachyOS) | Kitty | Probado |
+| Windows 11 | PowerShell 5.1 / Windows Terminal | ✅ Probado |
+| Linux (CachyOS) | Kitty | ✅ Probado |
+
+> **Nota para Kitty en Linux:** Los colores ANSI estándar (8 colores básicos) pueden verse mal con ciertos temas de terminal. El script usa 256-color para evitarlo. Si los colores de las barras no se ven correctamente, verifica que tu terminal soporte 256 colores ejecutando: `echo $TERM` (debería devolver `xterm-256color`, `kitty` o similar).
 
 Requiere Python 3 en el PATH.

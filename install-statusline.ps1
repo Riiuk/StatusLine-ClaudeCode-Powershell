@@ -28,14 +28,21 @@ def save_state(s):
         pass
 
 data = json.load(sys.stdin)
-ESC  = '\033'
+ESC   = '\033'
+RESET = ESC + '[0m'
+WHITE = ESC + '[38;5;255m'
+
+def get_color(pct):
+    if pct < 50:  return ESC + '[38;5;82m'   # verde
+    if pct < 80:  return ESC + '[38;5;214m'  # naranja/amarillo
+    return ESC + '[38;5;196m'                 # rojo
 
 def bar(pct, length):
     filled = min(math.floor(pct * length / 100), length)
     empty  = length - filled
     b = chr(0x2588) * filled + chr(0x2591) * empty
-    color = ESC + ('[32m' if pct < 50 else '[33m' if pct < 80 else '[31m')
-    return f"{color}[{b}]{ESC}[0m"
+    color = get_color(pct)
+    return f"{color}[{b}]{WHITE}"
 
 def fmt_tok(n):
     return f"{round(n/1000,1)}k" if n >= 1000 else str(n)
@@ -81,6 +88,8 @@ dur_ms  = (data.get('cost') or {}).get('total_duration_ms', 0)
 dur_s   = round(dur_ms / 1000)
 dur_str = f"Sesion: {dur_s//60}m{dur_s%60:02d}s" if dur_s >= 60 else f"Sesion: {dur_s}s"
 
+used = int(ctx.get('used_percentage', 0) or 0)
+
 rates = []
 for key, label, acc_tok in [('five_hour', '5h', five_tok), ('seven_day', '7d', seven_tok)]:
     if key not in rl: continue
@@ -90,7 +99,6 @@ for key, label, acc_tok in [('five_hour', '5h', five_tok), ('seven_day', '7d', s
     b        = bar(used_pct, 10)
     rates.append(f"{label}:{b} {used_pct}% ↺ {rst} ({fmt_tok(acc_tok)})")
 
-used    = int(ctx.get('used_percentage', 0))
 ctx_str = f"Contexto: {bar(used, 20)} {used}%"
 
 grp1 = ' | '.join([model, tok_s, dur_str])
@@ -102,7 +110,7 @@ if grp2:
 else:
     out = ' | '.join(filter(None, [grp1, grp3]))
 
-sys.stdout.write(out)
+sys.stdout.write(f"{WHITE}{out}{RESET}")
 sys.stdout.flush()
 '@
 
